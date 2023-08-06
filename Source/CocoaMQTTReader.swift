@@ -35,6 +35,8 @@ protocol CocoaMQTTReaderDelegate: AnyObject {
     func didReceive(_ reader: CocoaMQTTReader, unsuback: FrameUnsubAck)
 
     func didReceive(_ reader: CocoaMQTTReader, pingresp: FramePingResp)
+
+    func didReceive(_ reader: CocoaMQTTReader, disconnect: FrameDisconnect)
 }
 
 class CocoaMQTTReader {
@@ -171,6 +173,12 @@ class CocoaMQTTReader {
                 break
             }
             delegate?.didReceive(self, pingresp: frame)
+        case .disconnect:
+            guard let frame = FrameDisconnect(packetFixedHeaderType: header, bytes: data) else {
+                printError("Reader parse \(frameType) failed, data: \(data)")
+                break
+            }
+            delegate?.didReceive(self, disconnect: frame)
         default:
             break
         }
