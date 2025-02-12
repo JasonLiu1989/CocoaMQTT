@@ -698,8 +698,8 @@ extension CocoaMQTT5: CocoaMQTTSocketDelegate {
 extension CocoaMQTT5: CocoaMQTTReaderDelegate {
 
     func didReceive(_ reader: CocoaMQTTReader, disconnect: FrameDisconnect) {
-        delegate?.mqtt5(self, didReceiveDisconnectReasonCode: disconnect.receiveReasonCode!)
-        didDisconnectReasonCode(self, disconnect.receiveReasonCode!)
+        delegate?.mqtt5(self, didReceiveDisconnectReasonCode: disconnect.receiveReasonCode ?? .normalDisconnection)
+        didDisconnectReasonCode(self, disconnect.receiveReasonCode ?? .normalDisconnection)
     }
     
     func didReceive(_ reader: CocoaMQTTReader, auth: FrameAuth) {
